@@ -102,8 +102,8 @@ bool GtkCandidateWindow::create() {
         return true; // Already created
     }
     
-    // Create window
-    pImpl->window = gtk_window_new(GTK_WINDOW_POPUP);
+    // GTK4: Create window (GTK_WINDOW_POPUP is deprecated)
+    pImpl->window = gtk_window_new();
     if (!pImpl->window) {
         std::cerr << "Failed to create candidate window" << std::endl;
         return false;
@@ -111,18 +111,17 @@ bool GtkCandidateWindow::create() {
     
     // Set window properties
     gtk_window_set_decorated(GTK_WINDOW(pImpl->window), FALSE);
-    gtk_window_set_skip_taskbar_hint(GTK_WINDOW(pImpl->window), TRUE);
-    gtk_window_set_skip_pager_hint(GTK_WINDOW(pImpl->window), TRUE);
-    gtk_window_set_type_hint(GTK_WINDOW(pImpl->window), GDK_WINDOW_TYPE_HINT_POPUP_MENU);
+    // GTK4: skip_taskbar_hint and skip_pager_hint are deprecated
+    // GTK4: type_hint is deprecated, window manager handles this
     gtk_window_set_resizable(GTK_WINDOW(pImpl->window), FALSE);
-    gtk_window_set_keep_above(GTK_WINDOW(pImpl->window), TRUE);
+    // GTK4: keep_above may not work as expected
     
     // Create drawing area
     pImpl->drawingArea = gtk_drawing_area_new();
     gtk_widget_set_size_request(pImpl->drawingArea, pImpl->width, pImpl->height);
     
-    // Add drawing area to window
-    gtk_container_add(GTK_CONTAINER(pImpl->window), pImpl->drawingArea);
+    // GTK4: Use gtk_window_set_child instead of gtk_container_add
+    gtk_window_set_child(GTK_WINDOW(pImpl->window), pImpl->drawingArea);
     
     // Connect signals
     connectSignals();
@@ -140,7 +139,8 @@ bool GtkCandidateWindow::create() {
 void GtkCandidateWindow::destroy() {
 #ifdef OWCAT_USE_GTK
     if (pImpl->window) {
-        gtk_widget_destroy(pImpl->window);
+        // GTK4: Use gtk_window_destroy instead of gtk_widget_destroy
+        gtk_window_destroy(GTK_WINDOW(pImpl->window));
         pImpl->window = nullptr;
         pImpl->drawingArea = nullptr;
     }
@@ -150,7 +150,8 @@ void GtkCandidateWindow::destroy() {
 bool GtkCandidateWindow::show() {
 #ifdef OWCAT_USE_GTK
     if (pImpl->window && !pImpl->candidates.empty()) {
-        gtk_widget_show_all(pImpl->window);
+        // GTK4: gtk_widget_show_all is deprecated, use gtk_widget_show
+        gtk_widget_show(pImpl->window);
         pImpl->isVisible = true;
         return true;
     }

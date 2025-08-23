@@ -160,10 +160,9 @@ bool GtkSettingsDialog::create(GtkWindow* parent) {
     
     if (parent) {
         gtk_window_set_transient_for(GTK_WINDOW(pImpl->dialog), parent);
-        gtk_window_set_position(GTK_WINDOW(pImpl->dialog), GTK_WIN_POS_CENTER_ON_PARENT);
-    } else {
-        gtk_window_set_position(GTK_WINDOW(pImpl->dialog), GTK_WIN_POS_CENTER);
+        // GTK4: gtk_window_set_position is deprecated, window manager handles positioning
     }
+    // GTK4: gtk_window_set_position is deprecated, window manager handles positioning
     
     // Create content
     createContent();
@@ -184,7 +183,8 @@ bool GtkSettingsDialog::create(GtkWindow* parent) {
 void GtkSettingsDialog::destroy() {
 #ifdef OWCAT_USE_GTK
     if (pImpl->dialog) {
-        gtk_widget_destroy(pImpl->dialog);
+        // GTK4: Use gtk_window_destroy instead of gtk_widget_destroy
+        gtk_window_destroy(GTK_WINDOW(pImpl->dialog));
         pImpl->dialog = nullptr;
     }
 #endif
@@ -199,7 +199,8 @@ bool GtkSettingsDialog::show() {
         // Load current settings into UI
         loadSettings();
         
-        gtk_widget_show_all(pImpl->dialog);
+        // GTK4: gtk_widget_show_all is deprecated, use gtk_widget_show
+        gtk_widget_show(pImpl->dialog);
         pImpl->isVisible = true;
         return true;
     }

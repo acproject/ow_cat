@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Cross-platform input method with AI-powered prediction",
   "dependencies": [
-    "gtk3",
+    "gtk4",
     "glib",
     "pango",
     "cairo",

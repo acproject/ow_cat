@@ -7,7 +7,7 @@
 - 🚀 **跨平台支持**: Windows、macOS、Linux
 - 🧠 **AI智能预测**: 基于Qwen0.6B模型的智能词汇预测
 - 📚 **智能词库**: 支持用户词汇学习和频率调整
-- 🎨 **现代UI**: 基于GTK的美观用户界面
+- 🎨 **现代UI**: 基于GTK4的美观用户界面
 - 🔒 **本地运行**: 无需网络连接，保护隐私
 - ⚡ **高性能**: 优化的C++实现，响应迅速
 
@@ -15,7 +15,7 @@
 
 ```
 ┌─────────────────┐
-│   用户界面层     │  GTK-based UI
+│   用户界面层     │  GTK4-based UI
 ├─────────────────┤
 │   平台适配层     │  Windows IME / macOS IMK / Linux IBus/Fcitx
 ├─────────────────┤
@@ -27,7 +27,7 @@
 
 - **核心引擎**: 拼音转换、词库管理、AI预测算法
 - **平台适配**: 各平台原生输入法API集成
-- **用户界面**: GTK实现的候选词窗口和设置界面
+- **用户界面**: GTK4实现的候选词窗口和设置界面
 - **AI预测**: 基于llama.cpp的Qwen0.6B模型集成
 
 ## 构建要求
@@ -39,7 +39,7 @@
 - vcpkg包管理器
 
 ### 依赖库
-- GTK3 - 用户界面
+- GTK4 - 用户界面
 - SQLite3 - 词库存储
 - spdlog - 日志系统
 - nlohmann/json - JSON处理
@@ -66,7 +66,7 @@ set VCPKG_ROOT=C:\path\to\vcpkg  # Windows
 ### 2. 安装依赖
 
 ```bash
-vcpkg install gtk3 sqlite3 spdlog nlohmann-json boost-filesystem boost-system boost-thread
+vcpkg install gtk4 sqlite3 spdlog nlohmann-json boost-filesystem boost-system boost-thread
 ```
 
 ### 3. 构建项目
@@ -112,7 +112,7 @@ ow_cat/
 ├── data/                  # 数据文件
 │   └── dictionary.db     # 词库数据库
 ├── models/                # AI模型文件
-│   └── qwen0.6b.gguf     # Qwen模型文件
+│   └── qwen3:0.6b.gguf     # Qwen模型文件
 └── resources/             # 资源文件
     ├── icons/            # 图标文件
     └── themes/           # 主题文件
@@ -160,6 +160,6 @@ ow_cat/
 ## 致谢
 
 - [llama.cpp](https://github.com/ggerganov/llama.cpp) - AI模型推理引擎
-- [GTK](https://www.gtk.org/) - 跨平台UI框架
+- [GTK4](https://www.gtk.org/) - 跨平台UI框架
 - [vcpkg](https://github.com/Microsoft/vcpkg) - C++包管理器
 - [Qwen](https://github.com/QwenLM/Qwen) - 预训练语言模型

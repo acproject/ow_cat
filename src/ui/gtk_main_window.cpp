@@ -127,7 +127,7 @@ bool GtkMainWindow::create(GtkApplication* app) {
     // Set window properties
     gtk_window_set_title(GTK_WINDOW(pImpl->window), "OwCat IME");
     gtk_window_set_default_size(GTK_WINDOW(pImpl->window), 800, 600);
-    gtk_window_set_position(GTK_WINDOW(pImpl->window), GTK_WIN_POS_CENTER);
+    // GTK4: gtk_window_set_position is deprecated, window manager handles positioning
     
     // Set window icon
     gtk_window_set_icon_name(GTK_WINDOW(pImpl->window), "owcat");
@@ -160,7 +160,8 @@ bool GtkMainWindow::create(GtkApplication* app) {
 void GtkMainWindow::destroy() {
 #ifdef OWCAT_USE_GTK
     if (pImpl->window) {
-        gtk_widget_destroy(pImpl->window);
+        // GTK4: Use gtk_window_destroy instead of gtk_widget_destroy
+        gtk_window_destroy(GTK_WINDOW(pImpl->window));
         pImpl->window = nullptr;
     }
 #endif
@@ -169,7 +170,8 @@ void GtkMainWindow::destroy() {
 bool GtkMainWindow::show() {
 #ifdef OWCAT_USE_GTK
     if (pImpl->window) {
-        gtk_widget_show_all(pImpl->window);
+        // GTK4: gtk_widget_show_all is deprecated, use gtk_widget_show
+        gtk_widget_show(pImpl->window);
         gtk_window_present(GTK_WINDOW(pImpl->window));
         pImpl->isVisible = true;
         return true;

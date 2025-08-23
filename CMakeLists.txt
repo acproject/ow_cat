@@ -39,9 +39,9 @@ find_package(Threads REQUIRED)
 
 # GTK依赖
 if(UNIX AND NOT APPLE)
-    pkg_check_modules(GTK4 REQUIRED gtk+-4.0)
+    pkg_check_modules(GTK4 REQUIRED gtk4)
 elseif(WIN32)
-    find_package(unofficial-gtk3 CONFIG REQUIRED)
+    find_package(unofficial-gtk4 CONFIG REQUIRED)
 endif()
 
 # 包含子目录

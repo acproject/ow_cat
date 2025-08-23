@@ -2,20 +2,20 @@
 # Find required packages for UI
 find_package(PkgConfig REQUIRED)
 
-# Find GTK+3
-pkg_check_modules(GTK3 REQUIRED gtk+-3.0)
-pkg_check_modules(GDK3 REQUIRED gdk-3.0)
+# Find GTK4
+pkg_check_modules(GTK4 REQUIRED gtk4)
+pkg_check_modules(GDK4 REQUIRED gdk-4.0)
 pkg_check_modules(GLIB2 REQUIRED glib-2.0)
 pkg_check_modules(GOBJECT2 REQUIRED gobject-2.0)
 pkg_check_modules(PANGO REQUIRED pango)
 pkg_check_modules(CAIRO REQUIRED cairo)
 
 # Check if GTK is available
-if(GTK3_FOUND)
-    message(STATUS "GTK+3 found: ${GTK3_VERSION}")
+if(GTK4_FOUND)
+    message(STATUS "GTK4 found: ${GTK4_VERSION}")
     set(OWCAT_USE_GTK ON)
 else()
-    message(WARNING "GTK+3 not found, UI will be disabled")
+    message(WARNING "GTK4 not found, UI will be disabled")
     set(OWCAT_USE_GTK OFF)
 endif()
 
@@ -58,8 +58,8 @@ target_include_directories(ow_cat_ui
         ${CMAKE_CURRENT_SOURCE_DIR}/../../include
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}
-        ${GTK3_INCLUDE_DIRS}
-        ${GDK3_INCLUDE_DIRS}
+        ${GTK4_INCLUDE_DIRS}
+        ${GDK4_INCLUDE_DIRS}
         ${GLIB2_INCLUDE_DIRS}
         ${GOBJECT2_INCLUDE_DIRS}
         ${PANGO_INCLUDE_DIRS}
@@ -69,17 +69,17 @@ target_include_directories(ow_cat_ui
 # GTK依赖配置
 if(OWCAT_USE_GTK)
     if(WIN32)
-        # Windows下使用vcpkg安装的GTK3
+        # Windows下使用vcpkg安装的GTK4
         target_link_libraries(ow_cat_ui
             PUBLIC
-                unofficial::gtk3::gtk
+                unofficial::gtk4::gtk
         )
     else()
-        # Linux/macOS下使用pkg-config查找GTK3
+        # Linux/macOS下使用pkg-config查找GTK4
         target_link_libraries(ow_cat_ui
             PUBLIC
-                ${GTK3_LIBRARIES}
-                ${GDK3_LIBRARIES}
+                ${GTK4_LIBRARIES}
+                ${GDK4_LIBRARIES}
                 ${GLIB2_LIBRARIES}
                 ${GOBJECT2_LIBRARIES}
                 ${PANGO_LIBRARIES}
@@ -87,8 +87,8 @@ if(OWCAT_USE_GTK)
         )
         target_compile_options(ow_cat_ui
             PRIVATE
-                ${GTK3_CFLAGS_OTHER}
-                ${GDK3_CFLAGS_OTHER}
+                ${GTK4_CFLAGS_OTHER}
+                ${GDK4_CFLAGS_OTHER}
                 ${GLIB2_CFLAGS_OTHER}
                 ${GOBJECT2_CFLAGS_OTHER}
                 ${PANGO_CFLAGS_OTHER}
@@ -110,8 +110,8 @@ if(OWCAT_USE_GTK)
     target_compile_definitions(ow_cat_ui
         PRIVATE
             OWCAT_USE_GTK=1
-            GTK_VERSION_MIN_REQUIRED=GTK_VERSION_3_10
-            GTK_VERSION_MAX_ALLOWED=GTK_VERSION_3_24
+            GTK_VERSION_MIN_REQUIRED=GTK_VERSION_4_0
+            GTK_VERSION_MAX_ALLOWED=GTK_VERSION_4_12
     )
 else()
     target_compile_definitions(ow_cat_ui
@@ -174,13 +174,13 @@ endif()
 # 打印配置摘要
 if(OWCAT_USE_GTK)
     message(STATUS "UI Configuration:")
-    message(STATUS "  GTK+3 Version: ${GTK3_VERSION}")
-    message(STATUS "  GTK+3 Libraries: ${GTK3_LIBRARIES}")
-    message(STATUS "  GTK+3 Include Dirs: ${GTK3_INCLUDE_DIRS}")
+    message(STATUS "  GTK4 Version: ${GTK4_VERSION}")
+    message(STATUS "  GTK4 Libraries: ${GTK4_LIBRARIES}")
+    message(STATUS "  GTK4 Include Dirs: ${GTK4_INCLUDE_DIRS}")
     message(STATUS "  UI Library: ow_cat_ui (STATIC)")
     message(STATUS "  UI Sources: ${UI_SOURCES}")
 else()
-    message(STATUS "UI Configuration: DISABLED (GTK+3 not found)")
+    message(STATUS "UI Configuration: DISABLED (GTK4 not found)")
 endif()
 
 # 导出配置给父CMakeLists.txt

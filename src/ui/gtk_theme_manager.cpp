@@ -19,7 +19,7 @@ namespace owcat {
 struct GtkThemeManager::Impl {
 #ifdef OWCAT_USE_GTK
     GtkCssProvider* cssProvider;
-    GdkScreen* screen;
+    GdkDisplay* display; // GTK4: GdkScreen is deprecated, use GdkDisplay
 #endif
     
     // State
@@ -35,7 +35,7 @@ struct GtkThemeManager::Impl {
     Impl() {
 #ifdef OWCAT_USE_GTK
         cssProvider = nullptr;
-        screen = nullptr;
+        display = nullptr; // GTK4: Use GdkDisplay instead of GdkScreen
 #endif
         
         currentTheme = "default";
@@ -381,17 +381,17 @@ bool GtkThemeManager::initialize() {
         return false;
     }
     
-    // Get default screen
-    pImpl->screen = gdk_screen_get_default();
-    if (!pImpl->screen) {
-        std::cerr << "Failed to get default screen" << std::endl;
+    // GTK4: Get default display instead of screen
+    pImpl->display = gdk_display_get_default();
+    if (!pImpl->display) {
+        std::cerr << "Failed to get default display" << std::endl;
         return false;
     }
     
-    // Add CSS provider to screen
-    gtk_style_context_add_provider_for_screen(pImpl->screen,
-                                              GTK_STYLE_PROVIDER(pImpl->cssProvider),
-                                              GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    // GTK4: Add CSS provider to display
+    gtk_style_context_add_provider_for_display(pImpl->display,
+                                               GTK_STYLE_PROVIDER(pImpl->cssProvider),
+                                               GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     
     // Load default theme
     loadTheme(pImpl->currentTheme);
@@ -406,9 +406,10 @@ bool GtkThemeManager::initialize() {
 
 void GtkThemeManager::shutdown() {
 #ifdef OWCAT_USE_GTK
-    if (pImpl->cssProvider && pImpl->screen) {
-        gtk_style_context_remove_provider_for_screen(pImpl->screen,
-                                                     GTK_STYLE_PROVIDER(pImpl->cssProvider));
+    if (pImpl->cssProvider && pImpl->display) {
+        // GTK4: Remove CSS provider from display
+        gtk_style_context_remove_provider_for_display(pImpl->display,
+                                                      GTK_STYLE_PROVIDER(pImpl->cssProvider));
     }
     
     if (pImpl->cssProvider) {
@@ -416,7 +417,7 @@ void GtkThemeManager::shutdown() {
         pImpl->cssProvider = nullptr;
     }
     
-    pImpl->screen = nullptr;
+    pImpl->display = nullptr; // GTK4: Use display instead of screen
 #endif
 }
 

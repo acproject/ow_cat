@@ -8,6 +8,10 @@
 #include <gtk/gtk.h>
 #include <gdk/gdk.h>
 #include <glib.h>
+
+// NOTE: GtkStatusIcon is deprecated in GTK4
+// This implementation may need to be replaced with a different approach
+// such as using system tray protocols directly or alternative libraries
 #endif
 
 namespace owcat {
@@ -101,7 +105,8 @@ bool GtkStatusIcon::create() {
 void GtkStatusIcon::destroy() {
 #ifdef OWCAT_USE_GTK
     if (pImpl->menu) {
-        gtk_widget_destroy(pImpl->menu);
+        // GTK4: Use appropriate destroy method for menu widgets
+        g_object_unref(pImpl->menu);
         pImpl->menu = nullptr;
     }
     
