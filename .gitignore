@@ -1,0 +1,34 @@
+# CMake build files
+build/
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+.idea/
+.idea/**
+# other
+docs/
+other_project/
+
+# Visual Studio files
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+
+# Other
+*.DS_Store
+debug_detailed
+debug_interpolation
+debug_parsing
+test_lexer
+test_print_debug
+test_simple_interpolation
+test_string_edge_cases
+test_string_print
+
+.cache/
+.cache/**
+
+# SwiftSource
+# SwiftSource/**

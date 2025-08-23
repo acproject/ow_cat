@@ -1,0 +1,29 @@
+{
+  "name": "ow-cat",
+  "version": "1.0.0",
+  "description": "Cross-platform input method with AI-powered prediction",
+  "dependencies": [
+    "gtk3",
+    "glib",
+    "pango",
+    "cairo",
+    "gdk-pixbuf",
+    "nlohmann-json",
+    "spdlog",
+    "fmt",
+    "sqlite3",
+    "utf8cpp",
+    "boost-filesystem",
+    "boost-system",
+    "boost-thread"
+  ],
+  "features": {
+    "llama-cpp": {
+      "description": "Enable llama.cpp integration for AI prediction",
+      "dependencies": [
+        "llama-cpp"
+      ]
+    }
+  },
+  "builtin-baseline": "2024.01.12"
+}
