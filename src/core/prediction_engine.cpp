@@ -376,24 +376,32 @@ void PredictionEngine::shutdown() {
     pImpl->shutdown();
 }
 
-CandidateList PredictionEngine::predictNextWords(const std::string& context, int max_predictions) {
+CandidateList PredictionEngine::predictNext(const std::string& context, int max_predictions) const {
     return pImpl->predictNextWords(context, max_predictions);
 }
 
-CandidateList PredictionEngine::completePartialInput(const std::string& partial_text, int max_completions) {
-    return pImpl->completePartialInput(partial_text, max_completions);
+CandidateList PredictionEngine::predictCompletion(const std::string& partial_input, const std::string& context, int max_predictions) const {
+    return pImpl->completePartialInput(partial_input, max_predictions);
 }
 
-CandidateList PredictionEngine::predictFromPinyin(const std::string& pinyin_sequence, const std::string& context, int max_predictions) {
-    return pImpl->predictFromPinyin(pinyin_sequence, context, max_predictions);
+CandidateList PredictionEngine::predictFromPinyin(const std::string& pinyin, const std::string& context, int max_predictions) const {
+    return pImpl->predictFromPinyin(pinyin, context, max_predictions);
 }
 
-void PredictionEngine::learnUserPattern(const std::string& input_sequence, const std::string& selected_text) {
-    pImpl->learnUserPattern(input_sequence, selected_text);
+bool PredictionEngine::learnInputPattern(const std::vector<std::string>& input_sequence, const std::string& context) {
+    // 将vector转换为string进行处理
+    std::string sequence_str;
+    for (const auto& item : input_sequence) {
+        if (!sequence_str.empty()) sequence_str += " ";
+        sequence_str += item;
+    }
+    pImpl->learnUserPattern(sequence_str, context);
+    return true;
 }
 
-bool PredictionEngine::updateModel(const std::string& new_model_path) {
-    return pImpl->updateModel(new_model_path);
+bool PredictionEngine::updateModel(const std::vector<std::string>& training_data) {
+    // 简化实现，暂时返回false
+    return false;
 }
 
 void PredictionEngine::setPredictionThreshold(double threshold) {

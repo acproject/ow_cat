@@ -16,6 +16,9 @@ struct Candidate {
     int frequency;              // 使用频率
     bool is_prediction;         // 是否为AI预测结果
     
+    // 默认构造函数
+    Candidate() : text(""), pinyin(""), score(0.0), frequency(0), is_prediction(false) {}
+    
     Candidate(const std::string& t, const std::string& p, double s = 0.0, int f = 0, bool pred = false)
         : text(t), pinyin(p), score(s), frequency(f), is_prediction(pred) {}
 };

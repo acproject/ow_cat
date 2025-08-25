@@ -1,16 +1,7 @@
 # UI层模块
-# Find required packages for UI
-find_package(PkgConfig REQUIRED)
+# GTK4 configuration is inherited from parent CMakeLists.txt
 
-# Find GTK4
-pkg_check_modules(GTK4 REQUIRED gtk4)
-pkg_check_modules(GDK4 REQUIRED gdk-4.0)
-pkg_check_modules(GLIB2 REQUIRED glib-2.0)
-pkg_check_modules(GOBJECT2 REQUIRED gobject-2.0)
-pkg_check_modules(PANGO REQUIRED pango)
-pkg_check_modules(CAIRO REQUIRED cairo)
-
-# Check if GTK is available
+# Check if GTK is available (configured in parent)
 if(GTK4_FOUND)
     message(STATUS "GTK4 found: ${GTK4_VERSION}")
     set(OWCAT_USE_GTK ON)
@@ -20,11 +11,6 @@ else()
 endif()
 
 set(UI_SOURCES
-    ui_manager.cpp
-    candidate_window.cpp
-    settings_window.cpp
-    status_bar.cpp
-    theme_manager.cpp
     # GTK UI implementation
     gtk_ui.cpp
     gtk_main_window.cpp
@@ -36,12 +22,6 @@ set(UI_SOURCES
 )
 
 set(UI_HEADERS
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../include/ui/ui_manager.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../include/ui/candidate_window.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../include/ui/settings_window.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../include/ui/status_bar.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../include/ui/theme_manager.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../include/ui/ui_types.h
     # GTK UI headers
     ${CMAKE_CURRENT_SOURCE_DIR}/../../include/ui/gtk_ui.h
 )
@@ -59,42 +39,15 @@ target_include_directories(ow_cat_ui
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${GTK4_INCLUDE_DIRS}
-        ${GDK4_INCLUDE_DIRS}
-        ${GLIB2_INCLUDE_DIRS}
-        ${GOBJECT2_INCLUDE_DIRS}
-        ${PANGO_INCLUDE_DIRS}
-        ${CAIRO_INCLUDE_DIRS}
 )
 
-# GTK依赖配置
+# GTK依赖配置 - 使用vcpkg配置的库
 if(OWCAT_USE_GTK)
-    if(WIN32)
-        # Windows下使用vcpkg安装的GTK4
-        target_link_libraries(ow_cat_ui
-            PUBLIC
-                unofficial::gtk4::gtk
-        )
-    else()
-        # Linux/macOS下使用pkg-config查找GTK4
-        target_link_libraries(ow_cat_ui
-            PUBLIC
-                ${GTK4_LIBRARIES}
-                ${GDK4_LIBRARIES}
-                ${GLIB2_LIBRARIES}
-                ${GOBJECT2_LIBRARIES}
-                ${PANGO_LIBRARIES}
-                ${CAIRO_LIBRARIES}
-        )
-        target_compile_options(ow_cat_ui
-            PRIVATE
-                ${GTK4_CFLAGS_OTHER}
-                ${GDK4_CFLAGS_OTHER}
-                ${GLIB2_CFLAGS_OTHER}
-                ${GOBJECT2_CFLAGS_OTHER}
-                ${PANGO_CFLAGS_OTHER}
-                ${CAIRO_CFLAGS_OTHER}
-        )
-    endif()
+    target_link_directories(ow_cat_ui PRIVATE ${GTK4_LIBRARY_DIRS})
+    target_link_libraries(ow_cat_ui
+        PUBLIC
+            ${GTK4_LIBRARIES}
+    )
 endif()
 
 # 链接其他依赖

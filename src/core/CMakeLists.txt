@@ -33,11 +33,10 @@ target_include_directories(ow_cat_core
 # 链接依赖
 target_link_libraries(ow_cat_core
     PUBLIC
-    sqlite3
+    SQLite::SQLite3
     nlohmann_json::nlohmann_json
     spdlog::spdlog
     fmt::fmt
-    utf8cpp
     Boost::filesystem
     Boost::system
 )

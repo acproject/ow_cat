@@ -1,13 +1,10 @@
 # 平台适配层模块
 set(PLATFORM_COMMON_SOURCES
     platform_manager.cpp
-    ime_interface.cpp
 )
 
 set(PLATFORM_COMMON_HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/../../include/platform/platform_manager.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../include/platform/ime_interface.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../include/platform/platform_types.h
 )
 
 # 平台特定源文件
@@ -18,12 +15,10 @@ set(PLATFORM_SPECIFIC_LIBS)
 # Windows平台
 if(WIN32)
     list(APPEND PLATFORM_SPECIFIC_SOURCES
-        windows/windows_ime.cpp
-        windows/text_service.cpp
-    )
-    list(APPEND PLATFORM_SPECIFIC_HEADERS
-        ${CMAKE_CURRENT_SOURCE_DIR}/../../include/platform/windows/windows_ime.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/../../include/platform/windows/text_service.h
+        windows/windows_candidate_window.cpp
+        windows/windows_ime_adapter.cpp
+        windows/windows_ime_message_handler.cpp
+        windows/windows_system_integration.cpp
     )
     list(APPEND PLATFORM_SPECIFIC_LIBS
         user32

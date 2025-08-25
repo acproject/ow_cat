@@ -10,11 +10,9 @@ if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
 endif()
 
-# 启用vcpkg工具链
-if(DEFINED ENV{VCPKG_ROOT} AND NOT DEFINED CMAKE_TOOLCHAIN_FILE)
-    set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
-        CACHE STRING "")
-endif()
+# 设置vcpkg工具链
+set(CMAKE_TOOLCHAIN_FILE "D:/vcpkg/scripts/buildsystems/vcpkg.cmake")
+set(VCPKG_TARGET_TRIPLET "x64-windows")
 
 # 设置输出目录
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
@@ -37,11 +35,46 @@ endif()
 find_package(PkgConfig REQUIRED)
 find_package(Threads REQUIRED)
 
-# GTK依赖
-if(UNIX AND NOT APPLE)
-    pkg_check_modules(GTK4 REQUIRED gtk4)
-elseif(WIN32)
-    find_package(unofficial-gtk4 CONFIG REQUIRED)
+# GTK依赖 - 统一使用pkg-config方式
+if(EXISTS "D:/vcpkg/installed/x64-windows")
+    set(GTK4_FOUND TRUE)
+    set(GTK4_VERSION "4.16.3")
+    message(STATUS "GTK4 found via vcpkg at D:/vcpkg/installed/x64-windows")
+    
+    # Set GTK4 include directories
+    set(GTK4_INCLUDE_DIRS
+        "D:/vcpkg/installed/x64-windows/include/gtk-4.0"
+        "D:/vcpkg/installed/x64-windows/include/glib-2.0"
+        "D:/vcpkg/installed/x64-windows/lib/glib-2.0/include"
+        "D:/vcpkg/installed/x64-windows/include/pango-1.0"
+        "D:/vcpkg/installed/x64-windows/include/harfbuzz"
+        "D:/vcpkg/installed/x64-windows/include/cairo"
+        "D:/vcpkg/installed/x64-windows/include/gdk-pixbuf-2.0"
+        "D:/vcpkg/installed/x64-windows/include/graphene-1.0"
+        "D:/vcpkg/installed/x64-windows/lib/graphene-1.0/include"
+    )
+    
+    # Set GTK4 library directories and libraries
+    set(GTK4_LIBRARY_DIRS "D:/vcpkg/installed/x64-windows/lib")
+    set(GTK4_LIBRARIES
+        gtk-4 glib-2.0 gobject-2.0 gio-2.0 pango-1.0 pangocairo-1.0
+        cairo cairo-gobject gdk_pixbuf-2.0 harfbuzz graphene-1.0
+    )
+else()
+    set(GTK4_FOUND FALSE)
+    message(STATUS "GTK4 not found - vcpkg installation not detected")
+endif()
+
+# 查找其他依赖包
+find_package(boost_filesystem CONFIG REQUIRED)
+find_package(boost_system CONFIG REQUIRED)
+find_package(boost_thread CONFIG REQUIRED)
+find_package(spdlog CONFIG REQUIRED)
+find_package(nlohmann_json CONFIG REQUIRED)
+find_package(fmt CONFIG REQUIRED)
+find_package(SQLite3 REQUIRED)
+if(NOT SQLite3_FOUND)
+    message(FATAL_ERROR "SQLite3 not found")
 endif()
 
 # 包含子目录

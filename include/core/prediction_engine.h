@@ -131,10 +131,8 @@ private:
     CandidateList postprocessPredictions(const std::vector<std::string>& raw_predictions) const;
 
 private:
-    std::unique_ptr<LlamaPredictor> llama_predictor_;
-    std::string model_path_;
-    double prediction_threshold_;
-    bool is_initialized_;
+    class Impl;
+    std::unique_ptr<Impl> pImpl;
 };
 
 } // namespace core
